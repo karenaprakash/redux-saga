@@ -30,7 +30,7 @@ export const useHttp = (url,conditions) => {
           })
           .catch(err => {
             console.log(err);
-            setErrorData(err);
+            setErrorData(err.response.data);
             setIsLoading(false);
           });
       },conditions)

@@ -1,13 +1,15 @@
-import React from 'react'
+import React from 'react';
 import NavigationBar from '../../NavBar/navbar'
-import { BrowserRouter } from 'react-router-dom';
+import AuthContext from '../../../Hooks/Context/authContext';
 
 const Layout = (props) => {
     return (
-        <BrowserRouter>
-            <NavigationBar/>
-            {props.children}
-        </BrowserRouter>
+        <>
+          
+                <NavigationBar/> 
+                {props.children}
+           
+        </>
     )
 }
 

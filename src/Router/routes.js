@@ -6,9 +6,11 @@ import AddTask from '../Pages/Admin/add_task';
 import EditTask from '../Pages/Admin/edit_task';
 import AdminLogin from '../Pages/Admin/Login/login';
 import AdminSignUp from '../Pages/Admin/SignUp/signup';
+import Layout from '../Components/HOC/Layout/layout';
 
 const Routes = () => {
     return (
+        <Layout>
             <Switch>
                 <Route path="/admin/login" exact component={AdminLogin} />
                 <Route path="/admin/signup" exact component={AdminSignUp} />
@@ -16,6 +18,7 @@ const Routes = () => {
                 <Route path="/admin/edit-task/:id" exact component={EditTask} />                  
                 <Route path="/" exact component={Home} />
             </Switch>
+        </Layout>
     )
 }
 
