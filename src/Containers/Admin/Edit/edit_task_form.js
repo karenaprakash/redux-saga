@@ -12,7 +12,7 @@ import useForm from '../../../Hooks/formHooks';
 
 /* ------------ Actions ----------- */
 import {
-    editTask
+    editTask,
 } from '../../../Actions/user_actions';
 /* ------------ Components ----------- */
 import LoaderSpinner from '../../../Components/Loader/loader_spinner';
@@ -27,8 +27,10 @@ const EditTaskForm = (props) => {
         
             console.log('edittask')
             inputs._id = task_id;
-            const date = moment(inputs.date).format('YYYY-MM-DD');
-            inputs.date = date;
+            const start_date = moment(inputs.date).format('YYYY-MM-DD');
+            const end_date = moment(inputs.date).format('YYYY-MM-DD');
+            inputs.start = start_date;
+            inputs.end = end_date;
             console.log(inputs)
             props.dispatch(editTask(inputs))
         
@@ -38,14 +40,17 @@ const EditTaskForm = (props) => {
             return task_id === item._id
         });
 
-        const date = moment(task[0].date).format('YYYY-MM-DD');
-        console.log(task[0].time)
+        const start_date = moment(task[0].start).format('YYYY-MM-DD');
+        const end_date = moment(task[0].end).format('YYYY-MM-DD');
+
+        //console.log(task[0].time)
 
         let  inputData = {
                 _id : task[0]._id,
-                task : task[0].task,
+                title : task[0].title,
                 time : task[0].time,
-                date : date
+                start : start_date,
+                end : end_date
             }
 
     const {
@@ -72,10 +77,8 @@ const EditTaskForm = (props) => {
                 }
             }else if(props.data.editResponse.fetchedData.result !== undefined){ 
                     alert(props.data.editResponse.fetchedData.message) //alert response message
-                    
                    props.data.editResponse = {} //making response to empty object for next request 
-
-                
+                   return <Redirect to='/'/>
             }
         }
     }
@@ -89,16 +92,22 @@ const EditTaskForm = (props) => {
             <form onSubmit={handleSubmit}>
                 <div className="form_element">
                     <div className="form_element-lable">
-                        <label>Task</label>
+                        <label>Task Title</label>
                     </div>
-                    <input type="text" name="task" value={inputs.task} onChange={handleInputChange} required />
+                    <input type="text" name="title" value={inputs.title} onChange={handleInputChange} required />
                 </div>
                 <div className="form_element">
                     <div className="form_element-lable">
-                        <label>Date</label>
+                        <label>Start Date</label>
                     </div> 
-                    <input type="date" min={moment(Date()).format('YYYY-MM-DD')} name="date" value={inputs.date} onChange={handleInputChange} required />
-                </div>   
+                    <input type="date" min={moment(Date()).format('YYYY-MM-DD')} name="start" value={inputs.start} onChange={handleInputChange} required />
+                </div>  
+                <div className="form_element">
+                    <div className="form_element-lable">
+                        <label>End Date</label>
+                    </div> 
+                    <input type="date" min={moment(Date()).format('YYYY-MM-DD')} name="end" value={inputs.end} onChange={handleInputChange} required />
+                </div>    
                 <div className="form_element">
                     <div className="form_element-lable">
                         <label>Time</label>

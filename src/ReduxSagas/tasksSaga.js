@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest , takeEvery} from 'redux-saga/effects';
 
 import {
     SIGNUP_REQUEST,
@@ -53,7 +53,7 @@ function* getTasks() {
 }
 //watcher 
 function* getTasksSaga() {
-    yield takeLatest(TASKS_FETCH_REQUEST,getTasks)
+    yield takeEvery(TASKS_FETCH_REQUEST,getTasks)
 }
 /*-------X------- getTasksSaga  -------X--------*/
 

@@ -56,6 +56,11 @@ const NavigationBar = (props) => {
           <Typography variant="h6" className={classes.title}>
           <Link to='/' className={classes.WhiteColor}> Notifier  </Link>
           </Typography>
+          <Link to='/user'>
+                  <Button color="inherit">
+                    <label className={classes.WhiteColor} >View</label>
+                  </Button>
+          </Link>
           {
               !isAuth ? 
               null :
@@ -72,7 +77,6 @@ const NavigationBar = (props) => {
                         onClick={logout}
                         >Logout</label>
                     
-                  
                       {/* <label className={classes.WhiteColor} >Login</label>*/}
 
                   </Button>

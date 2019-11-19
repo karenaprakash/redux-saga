@@ -110,6 +110,8 @@ const getTasksData = async () => {
 //addTaskData 
 const addTaskData = async (data) => {
     console.log(data)
+
+
     const response_data =  await axios.post(`${API_URL}/admin/add-task`,data,{ withCredentials : true })
         .then(response => {
             return {

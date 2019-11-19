@@ -1,9 +1,9 @@
 /**
+ * we are not using it in this application 
  * 
  * useHttp: Custom Hook 
  * arguments: url and conditions 
  * function: fetch data from url and return it 
- * 
  */
 
 import { useState , useEffect } from 'react';

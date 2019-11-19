@@ -12,7 +12,6 @@ import useForm from '../../../Hooks/formHooks';
 /* ------------ Actions ----------- */
 import {
     addTask,
-    editTask
 } from '../../../Actions/user_actions';
 /* ------------ Components ----------- */
 import LoaderSpinner from '../../../Components/Loader/loader_spinner';
@@ -23,15 +22,19 @@ const AddTaskForm = (props) => {
 
     //it run as per requirenment 
     const callbackFunction = () => {
-            const date = moment(inputs.date).format('YYYY-MM-DD');
-            inputs.date = date;
+            const start_date = moment(inputs.start_date).format('YYYY-MM-DD');
+            const end_date = moment(inputs.date).format('YYYY-MM-DD');
+            inputs.start = start_date;
+            inputs.end = end_date;
+            console.log(inputs)
             props.dispatch(addTask(inputs))        
     }
 
     //default inputs 
     let inputData = {
-        task : '',
-        date : '',
+        title : '',
+        start : '',
+        end : '',
         time : ''
     }
 
@@ -81,15 +84,21 @@ const AddTaskForm = (props) => {
             <form onSubmit={handleSubmit}>
                 <div className="form_element">
                     <div className="form_element-lable">
-                        <label>Task</label>
+                        <label>Task Title</label>
                     </div>
-                    <input type="text" name="task" value={inputs.task} onChange={handleInputChange} required />
+                    <input type="text" name="title" value={inputs.title} onChange={handleInputChange} required />
                 </div>
                 <div className="form_element">
                     <div className="form_element-lable">
-                        <label>Date</label>
+                        <label>Start Date</label>
                     </div> 
-                    <input type="date" min={moment(Date()).format('YYYY-MM-DD')} name="date" value={inputs.date} onChange={handleInputChange} required />
+                    <input type="date" min={moment(Date()).format('YYYY-MM-DD')} name="start" value={inputs.start} onChange={handleInputChange} required />
+                </div> 
+                <div className="form_element">
+                    <div className="form_element-lable">
+                        <label>End Date</label>
+                    </div> 
+                    <input type="date" min={moment(Date()).format('YYYY-MM-DD')} name="end" value={inputs.end} onChange={handleInputChange} required />
                 </div>   
                 <div className="form_element">
                     <div className="form_element-lable">
