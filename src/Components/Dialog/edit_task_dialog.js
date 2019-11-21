@@ -98,7 +98,7 @@ const TaskEditDialog = (props) => {
                 if (props.data.editResponse.fetchedData.message === 'Authentication Failed') {
                     alert(props.data.editResponse.fetchedData.message) //alert error message
                     props.data.editResponse = {} //making response to empty object for next request 
-                    return <Redirect to='/admin/login' />
+                    return <Redirect to='/login' />
                 } else if (props.data.editResponse.fetchedData.message === 'Somthing went wrong') {
                     alert(props.data.editResponse.fetchedData.message)
                     props.data.editResponse = {} //making response to empty object for next request 
@@ -129,7 +129,7 @@ const TaskEditDialog = (props) => {
                 if (props.data.deleteResponse.fetchedData.message === 'Authentication Failed') {
                     alert(props.data.deleteResponse.fetchedData.message) //alert error message
                     props.data.deleteResponse = {} //making response to empty object for next request 
-                    return <Redirect to='/admin/login' />
+                    return <Redirect to='/login' />
                 } else if (props.data.deleteResponse.fetchedData.message === 'Somthing went wrong') {
                     alert(props.data.deleteResponse.fetchedData.message)
                     props.data.deleteResponse = {} //making response to empty object for next request 

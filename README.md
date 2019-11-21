@@ -1,81 +1,58 @@
-Event/Task managment project
 
-//adding react-big-calendar 
+Frontend : Event/Task managment project 
+Backend : react-sagas-api in github repo. 
 
-npm install --save react-big-calendar react-dnd react-dnd-html5-backend 
+//This project is built with ReactJs + Hooks + React-Redux + Redux-Saga + react-big-calendar + Admin Authentication 
 
-<div className="form_element">
-                    <div className="form_element-lable">
-                        <label>Start Date</label>
-                    </div> 
-                    <input type="date" min={moment(Date()).format('YYYY-MM-DD')} name="start" value={inputs.start} onChange={handleInputChange} required />
-                </div>  
-                <div className="form_element">
-                    <div className="form_element-lable">
-                        <label>End Date</label>
-                    </div> 
-                    <input type="date" min={moment(Date()).format('YYYY-MM-DD')} name="end" value={inputs.end} onChange={handleInputChange} required />
-                </div> 
+    "@material-ui/core": "^4.6.1",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/pickers": "^3.2.8",
+    "axios": "^0.19.0",
+    "js-cookie": "^2.2.1",
+    "moment": "^2.24.0",
+    "react": "^16.11.0",
+    "react-big-calendar": "^0.23.0",
+    "react-cookie": "^4.0.1",
+    "react-dnd": "^9.4.0",
+    "react-dnd-html5-backend": "^9.4.0",
+    "react-dom": "^16.11.0",
+    "react-redux": "^7.1.3",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.2.0",
+    "redux": "^4.0.4",
+    "redux-saga": "^1.1.3"
+ 
 
-   <div className="form_element">
-                    <div className="form_element-lable">
-                        <label>Start Time</label>
-                    </div> 
-                    <input type="time" name="start_time" value={inputs.start_time} onChange={handleInputChange} required />
-        
-                </div>  
-                <div className="form_element">
-                    <div className="form_element-lable">
-                        <label>End Time</label>
-                    </div> 
-                    <input type="time" name="end_time" value={inputs.end_time} onChange={handleInputChange} required />
-                </div> 
+console.log(newDate)
+    console.log(view)
+    let startDate;
+    let endDate;
+  
 
+    if(view === 'day'){
+      startDate = moment(newDate).format('YYYY-MM-DD');
+      endDate = moment(newDate).format('YYYY-MM-DD');
 
+      console.log(startDate)
+      console.log(endDate)
 
+      console.log('api for day')
 
-                 <div className="form_element">
-                    <TextField
-                        id="start"
-                        label="start"
-                        name="start"
-                        type="datetime-local"
-                        defaultValue={inputs.start}
-                        onChange={handleInputChange}
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                    />
-                </div>  
-                <div className="form_element">
-                    <TextField
-                        id="end"
-                        label="end"
-                        name="end"
-                        type="datetime-local"
-                        defaultValue={inputs.end}
-                        onChange={handleInputChange}
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                    />
-                </div>
+    }else if(view === 'week'){
+      startDate = moment(newDate).format('YYYY-MM-DD');
+      endDate = moment(newDate).format('YYYY-MM-DD');
 
+      console.log(startDate)
+      console.log(endDate)
 
-                  const AllEvents = props.data.fetchResponse.fetchedData.result;
-                  const Events = AllEvents.map(event => {
-                    return {
-                      _id : event._id,
-                      title : event.title,
-                      start : event.start,
-                      end : event.end
-                    }
-                  })
-                  //moment(event.end).format('YYYY,MM,DD,HH,mm,ss'),
-                  console.log(Events)
-                  setEvents(Events); 
+      console.log('api for week need start date and end date')
+      
+    }else if(view === 'month'){
+      startDate = moment(newDate).format('YYYY-MM-DD');
+      endDate = moment(newDate).format('YYYY-MM-DD');
 
+      console.log(startDate)
+      console.log(endDate)
 
-      start : new Date(moment(event.start).format('YYYY'),moment(event.start).format('MM'),moment(event.start).format('DD'),moment(event.start).format('HH'),moment(event.start).format('mm'),moment(event.start).format('ss')),
-     end : new Date(moment(event.start).format('YYYY'),moment(event.start).format('MM'),moment(event.start).format('DD'),moment(event.start).format('HH'),moment(event.start).format('mm'),moment(event.start).format('ss')),
-             
+      console.log('api for month need start date and end date')
+  

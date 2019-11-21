@@ -24,7 +24,7 @@ const getMethod = () => {
 //getSignupData
 const getSignupData = async (requestData) => {
     console.log(requestData)
-    const data =  await axios.post(`${API_URL}/admin/signup`,requestData)
+    const data =  await axios.post(`${API_URL}/signup`,requestData)
           .then(response => {
               return {
                   type : SIGNUP_SUCCESS,
@@ -53,7 +53,7 @@ const getSignupData = async (requestData) => {
 //getLoginData
 const getLoginData = async (requestData) => {
     console.log(requestData)
-    const data =  await axios.post(`${API_URL}/admin/login`,requestData , { withCredentials: true } )
+    const data =  await axios.post(`${API_URL}/login`,requestData , { withCredentials: true } )
           .then(response => {
               return {
                   type : LOGIN_SUCCESS,
@@ -80,8 +80,8 @@ const getLoginData = async (requestData) => {
 
 
 //getTasksData
-const getTasksData = async () => {
-  const data =  await axios.get(`${API_URL}/admin/get-tasks?skip=0&limit=10&order=desc`,{ withCredentials : true })
+const getTasksData = async (requestData) => {
+  const data =  await axios.get(`${API_URL}/get-tasks?startDate=${requestData.startDate}&endDate=${requestData.endDate}`,{ withCredentials : true })
         .then(response => {
             return {
                 type : TASKS_FETCH_SUCCESS,
@@ -112,7 +112,7 @@ const addTaskData = async (data) => {
     console.log(data)
 
 
-    const response_data =  await axios.post(`${API_URL}/admin/add-task`,data,{ withCredentials : true })
+    const response_data =  await axios.post(`${API_URL}/add-task`,data,{ withCredentials : true })
         .then(response => {
             return {
                 type : TASK_ADD_SUCCESS,
@@ -140,7 +140,7 @@ const addTaskData = async (data) => {
 //editTaskData 
 const editTaskData = async (data) => {
     console.log(data)
-    const response_data =  await axios.post(`${API_URL}/admin/edit-task`,data,{ withCredentials : true })
+    const response_data =  await axios.post(`${API_URL}/edit-task`,data,{ withCredentials : true })
         .then(response => {
             return {
                 type : TASK_EDIT_SUCCESS ,
@@ -169,7 +169,7 @@ const editTaskData = async (data) => {
 const deleteTaskData = async (id) => {
     console.log(id)
 
-    const response_data = await axios.delete(`${API_URL}/admin/delete-task?id=${id}`,{ withCredentials : true })
+    const response_data = await axios.delete(`${API_URL}/delete-task?id=${id}`,{ withCredentials : true })
     .then(response => {
         return {
             type : TASK_DELETE_SUCCESS,

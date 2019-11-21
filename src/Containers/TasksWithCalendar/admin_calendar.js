@@ -1,6 +1,8 @@
 import React, { useState , useEffect } from 'react';
 import {Redirect} from 'react-router-dom';
 import moment from "moment";
+import Fab from '@material-ui/core/Fab';
+import './style.css';
 /* ------------ Actions ----------- */
 import {
     getTasks,
@@ -8,18 +10,24 @@ import {
 /*------- connect react with redux --------*/
 import { connect } from 'react-redux';
 /*------- Components --------*/
-import TaskEditDialog from '../Dialog/edit_task_dialog';
-import TaskAddDialog from '../Dialog/add_task_dialog';
+import TaskEditDialog from '../../Components/Dialog/edit_task_dialog';
+import TaskAddDialog from '../../Components/Dialog/add_task_dialog';
+import TaskGetDialog from '../../Components/Dialog/get_task_dialog';
+
+
 /*------ Calendar -------*/
 import { Calendar , Views , momentLocalizer} from 'react-big-calendar';
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import Cookies from 'js-cookie';
+
 //localizer which handles date and all formates for react-big-calendar
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
-const TasksWithCalendar = (props) => {
+
+const AdminCalendar = (props) => {
   /**
    * events : store retrived events in array
    * event  : store perticuler event for performing some actions on it like add/edit/delete
@@ -28,14 +36,28 @@ const TasksWithCalendar = (props) => {
   const [events,setEvents] = useState([]);
   const [event,setEvent] = useState({});
   const [view,setView] = useState(Views.MONTH);
+  const [navigationDate,setNavigationDate] = useState({
+    startDate : moment().startOf('month').format('YYYY-MM-DD'),
+    endDate : moment().endOf('month').format('YYYY-MM-DD')
+  });
 
+ // console.log(navigationDate)
   /* ------------ Retrive our events from database ------------ */
   useEffect(()=>{
       /**
        * dispatch getTasks : function which calls task_apis and return response 
        */
-      props.dispatch(getTasks()); 
+     // props.dispatch(getTasks(navigationDate)); 
   },[])
+
+useEffect(()=>{
+    /**
+     * dispatch getTasks :
+     */
+   console.log(navigationDate)
+  props.dispatch(getTasks(navigationDate)); 
+},[navigationDate])
+
 
   /**
    * changeDatesType : it change our date type for add/update/delete 
@@ -44,6 +66,27 @@ const TasksWithCalendar = (props) => {
     return new Date(date)
   }
   
+  /* --------------------- Handle Get Event ----------------------- */
+
+  const [openGetDialog, setOpenGetDialog] = React.useState(false);
+
+   //function which handle editDialog close event
+   const handleCloseGet = () => {
+    setOpenGetDialog(false);
+  };
+
+  const handleClickOpenGet = () => {
+    setEvent(navigationDate);
+    setOpenGetDialog(true);
+  };
+
+  const handleGetEvent = (events) => {
+    setEvents(events)
+    handleCloseGet();
+  }
+
+  /* ----------X----------- Handle Get Event -----------X------------ */
+
   /* --------------------- Handle Add Event ----------------------- */
   /**
    * openAddDialog : it handle addDialog is open or not
@@ -58,7 +101,7 @@ const TasksWithCalendar = (props) => {
       return alert('Start date is invalid.')
     }
 
-    console.log(start)
+   // console.log(start)
 
     //set newEvent to event state.So we can pass it to addDialog 
     let newEvent = {
@@ -144,7 +187,7 @@ const TasksWithCalendar = (props) => {
       start : event.start,
       end : event.end
     }
-    console.log('resize event',event)
+//    console.log('resize event',event)
     setEvent(resizeEvent)
     handleClickOpenEdit(resizeEvent)
    
@@ -161,7 +204,7 @@ const TasksWithCalendar = (props) => {
        start : start,
        end : end
      }
-     console.log('droped event',dropedEvent)
+     //console.log('droped event',dropedEvent)
      setEvent(dropedEvent)
      handleClickOpenEdit(dropedEvent)
   };
@@ -172,7 +215,7 @@ const TasksWithCalendar = (props) => {
   /* ------------------ HandleDeletedEvent  : event deleted  ---------------------- */
 
   const handleDeletedEvent = (deletedEvent) => {
-    console.log(deletedEvent)
+  //  console.log(deletedEvent)
     const newEvents = events.filter((event) => {
       return event._id !== deletedEvent._id
     })
@@ -187,12 +230,15 @@ const TasksWithCalendar = (props) => {
       if(props.data.fetchResponse.error){
         alert(props.data.fetchResponse.fetchedData.message)
         props.data.fetchResponse = {} //making response to empty object for next request 
-        return <Redirect to='/admin/login'/> 
+        return <Redirect to='/login'/> 
       }else if(props.data.fetchResponse.fetchedData !== undefined){
           if(props.data.fetchResponse.fetchedData.result){
-              console.log(props.data.fetchResponse.fetchedData.result)
-
-              const Events = props.data.fetchResponse.fetchedData.result
+            //  console.log(props.data.fetchResponse.fetchedData.result)
+          /*  if(props.data.fetchResponse.fetchedData.message === 'Task not found.'){
+              alert(props.data.fetchResponse.fetchedData.message)              
+            }
+            */
+              const Events = props.data.fetchResponse.fetchedData.result.events
               .map(event => {
                 return {
                   _id : event._id,
@@ -201,9 +247,19 @@ const TasksWithCalendar = (props) => {
                   end :  changeDatesType(event.end),
                 }
               })
-              console.log('Fetched Events',Events)
-              setEvents(Events); 
-              props.data.fetchResponse = {} //making response to empty object for next request 
+
+              const user  = props.data.fetchResponse.fetchedData.result.user;
+              const roll = user.roll;
+
+              if(roll === 'user'){
+                return <Redirect to='/'/>
+              }else if(roll === 'admin'){
+                //console.log('Fetched Events',Events)
+                setEvents(Events); 
+                props.data.fetchResponse = {} //making response to empty object for next request 
+              }
+
+              
           }
       }
   }
@@ -222,11 +278,52 @@ const TasksWithCalendar = (props) => {
   }
   /* -------X----- handleViewChange ------X---- */
 
-  /* ------------ handleEventStatus ---------- */
+  const logout = () => {
+    //console.log('admin')
+    Cookies.remove('auth')
+    window.location.reload(true);
+  }
+  /* ------------ handleNavigationChange ---------- */
+  
+  const handleNavigationChange = (date,view,actions) => {
+    
+  console.log(date)
+  console.log(view)
+  console.log(actions)
 
+  let start, end;
+
+  if (view === 'month') {
+    start = moment(date).startOf('month').format('YYYY-MM-DD')
+    end = moment(date).endOf('month').format('YYYY-MM-DD')
+  }
+  if (view === 'week') {
+    start = moment(date).startOf('week').format('YYYY-MM-DD')
+    end = moment(date).endOf('week').format('YYYY-MM-DD')
+  }
+  if (view === 'day' || view === 'agenda') {
+    start = moment(date).startOf('day').format('YYYY-MM-DD')
+    end = moment(date).add(1,'d').format('YYYY-MM-DD')
+  }
+
+  console.log(start)
+  console.log(end)
+
+    setNavigationDate({
+      startDate : start,
+      endDate : end
+    })
+  }
+ // console.log('newDate',moment(navigationDate).format('YYYY-MM-DD'));
+  /* -------X----- handleNavigationChange ----X------ */
 
 return (
 <div className="App">
+
+  <Fab onClick={handleClickOpenGet} variant="extended" id='get_btn' aria-label="like" >
+    Get Tasks 
+  </Fab>
+
   {
       openEditDialog ? 
       <TaskEditDialog 
@@ -246,12 +343,23 @@ return (
         event={event} /> 
       : null
   }
+  {
+      openGetDialog ? 
+      <TaskGetDialog 
+        open={openGetDialog} 
+        setNavigationDate={setNavigationDate} 
+        handleClose={handleCloseGet} 
+        event={event} />
+      : null
+  }
 
       <DnDCalendar
         selectable
         defaultDate={new Date()}
+        views = {['month','agenda']}
         defaultView={view}
         onView = {handleViewChange}
+        onNavigate = {handleNavigationChange}
         events={events}
         localizer={localizer}
         onEventDrop={onEventDrop}
@@ -263,6 +371,11 @@ return (
         startAccessor="start"
         endAccessor="end"
       />
+
+      <Fab onClick={logout} variant="extended" id='logout_btn' aria-label="like" >
+        Logout
+      </Fab>
+
     </div>
   );
 }
@@ -274,10 +387,4 @@ const mapStateToProps = (state) => {
     }
   }
   
-  export default connect(mapStateToProps)(TasksWithCalendar);
-
-
-
-
-
-
+  export default connect(mapStateToProps)(AdminCalendar);

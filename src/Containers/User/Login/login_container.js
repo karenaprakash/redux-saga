@@ -9,11 +9,8 @@ import { login } from "../../../Actions/user_actions";
 import LoaderSpinner from '../../../Components/Loader/loader_spinner';
 import { connect } from 'react-redux';
 import './login_container.css';
-import AuthContext from '../../../Hooks/Context/authContext'; // provider 
-import NavigationBar from '../../../Components/NavBar/navbar'
 
 const LoginContainer = (props) => {
-
 
     //it calls after submition of form 
     const callbackFunction = () => {
@@ -57,8 +54,14 @@ const LoginContainer = (props) => {
             }else if(props.data.loginResponse.fetchedData.result !== undefined){ 
                 if(props.data.loginResponse.fetchedData.result.isAuth){ // if use is authenticated then we are redirecting to home page 
                     alert(props.data.loginResponse.fetchedData.message) //alert response message
-                    props.data.loginResponse = {} //making response to empty object for next request 
-                    return <Redirect to='/'/>
+                    if(props.data.loginResponse.fetchedData.result.roll === 'user') {
+                        props.data.loginResponse = {} //making response to empty object for next request 
+                        return <Redirect to='/'/>
+                    }else if(props.data.loginResponse.fetchedData.result.roll === 'admin'){
+                        props.data.loginResponse = {} //making response to empty object for next request 
+                        return <Redirect to='/admin'/>
+                    }
+                    
             }
         }
     }
@@ -89,7 +92,7 @@ const LoginContainer = (props) => {
                             :null
                         }
                         <input type='submit' name="submit" value='Login' />
-                        <Link to='/admin/signup'><input type='button' name='signup' value='Signup' /></Link>   
+                        <Link to='/signup'><input type='button' name='signup' value='Signup' /></Link>   
                         <Link to='/'><input type='button' name='cancel' value='Cancel' /></Link> 
                 </form>
             </div>

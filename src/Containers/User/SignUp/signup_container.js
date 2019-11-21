@@ -14,6 +14,8 @@ const SignupContainer = (props) => {
 
     //it calls after submition of form 
     const callbackFunction = () => {
+    console.log(inputs)
+        inputs.roll = 'user';
         props.dispatch(signup(inputs))
     }
 
@@ -23,7 +25,7 @@ const SignupContainer = (props) => {
         last_name : '',
         email : '',
         mobile : '',
-        password : ''
+        password : '',
     }
 
     let {
@@ -56,7 +58,7 @@ const SignupContainer = (props) => {
             }else if(props.data.signupResponse.fetchedData){
                 if(props.data.signupResponse.fetchedData.result){
                     alert(props.data.signupResponse.fetchedData.message)
-                    return <Redirect to='/admin/login'/>
+                    return <Redirect to='/login'/>
                 }
             }
         }
@@ -103,9 +105,8 @@ const SignupContainer = (props) => {
                     props.data.signupResponse !== undefined ? props.data.signupResponse.isLoading ? <LoaderSpinner/> : null : null
                 }
             </div>
-              
                 <input type='submit' name="submit" value='SignUp' />
-                <Link to='/admin/login'><input type='button' name='login' value='Login' /></Link>                            
+                <Link to='/login'><input type='button' name='login' value='Login' /></Link>                            
                 <Link to='/'><input type='button' name='cancel' value='Cancel' /></Link>      
         </form>
     </div>

@@ -47,8 +47,8 @@ yield takeLatest(LOGIN_REQUEST,login)
 
 /*-------------- getTasksSaga  ---------------*/
 //worker 
-function* getTasks() {
-        const data = yield getTasksData();
+function* getTasks(action) {
+        const data = yield getTasksData(action.payload.requestData);
         yield put(data);
 }
 //watcher 

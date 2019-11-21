@@ -54,6 +54,7 @@ const TaskAddDialog = (props) => {
         /**
          * Dispatching addTask function : which calles task_api for addTask in redux saga and return response 
          */
+        console.log(inputs)
         props.dispatch(addTask(inputs))
     }
     /**
@@ -81,7 +82,7 @@ const TaskAddDialog = (props) => {
         handleSubmit,
         handleInputChange
     } = useForm(InputData, callbackFunction);
-
+    console.log(props.data)
     /* -------------------------- Response Handling ------------------------------ */
     if (props.data.addResponse !== undefined) { // first time render loginResponse is undefined 
         if (props.data.addResponse.fetchedData !== undefined) { // first time responseData is undefined when submiting data
@@ -89,7 +90,7 @@ const TaskAddDialog = (props) => {
                 if (props.data.addResponse.fetchedData.message === 'Authentication Failed') {
                     alert(props.data.addResponse.fetchedData.message) //alert error message
                     props.data.addResponse = {} //making response to empty object for next request 
-                    return <Redirect to='/admin/login' />
+                    return <Redirect to='/login' />
                 } else if (props.data.addResponse.fetchedData.message === 'Somthing went wrong') {
                     alert(props.data.addResponse.fetchedData.message)
                     props.data.addResponse = {} //making response to empty object for next request 

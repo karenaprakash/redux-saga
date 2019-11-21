@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-console.log('navbar------------------------')
+//console.log('navbar------------------------')
 
 const NavigationBar = (props) => {
   const classes = useStyles();
@@ -32,7 +32,7 @@ const NavigationBar = (props) => {
   const cookie = Cookies.get('auth');
 
   useEffect(()=>{
-    console.log("cookie from navbar", cookie)
+   // console.log("cookie from navbar", cookie)
     if(cookie !== undefined){
       setIsAuth(true)
     }else{
@@ -56,21 +56,13 @@ const NavigationBar = (props) => {
           <Typography variant="h6" className={classes.title}>
           <Link to='/' className={classes.WhiteColor}> Notifier  </Link>
           </Typography>
-          <Link to='/user'>
-                  <Button color="inherit">
-                    <label className={classes.WhiteColor} >View</label>
-                  </Button>
-          </Link>
+    
           {
               !isAuth ? 
               null :
               <>
-                <Link to='/admin/signup'>
-                  <Button color="inherit">
-                    <label className={classes.WhiteColor} >Signup</label>
-                  </Button>
-                </Link>
-                <Link to='/admin/login'>
+
+                <Link to='/login'>
                   <Button color="inherit">
                   
                         <label className={classes.WhiteColor} 

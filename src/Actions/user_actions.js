@@ -52,12 +52,13 @@ export const logout = (data) => ({
 
 
 //getTasks
-export const getTasks = () => ({
+export const getTasks = (data) => ({
     type : TASKS_FETCH_REQUEST,
     payload : {
         fetchedData : {},
         isLoading : true,
-        error : false
+        error : false,
+        requestData : data
     }
 })
 

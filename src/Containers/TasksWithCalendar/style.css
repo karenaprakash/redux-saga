@@ -1,0 +1,12 @@
+#logout_btn{
+    position: absolute;
+    right: 0px;
+    margin : 30px;
+}
+
+#get_btn{
+    position: absolute;
+    left: 0px;
+    z-index: 99;
+    margin : 30px;
+}

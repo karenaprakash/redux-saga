@@ -1,6 +1,11 @@
 import React, { useState , useEffect } from 'react';
 import {Redirect} from 'react-router-dom';
 import moment from "moment";
+import Cookies from 'js-cookie';
+import Fab from '@material-ui/core/Fab';
+
+import './style.css';
+
 /* ------------ Actions ----------- */
 import {
     getTasks,
@@ -19,7 +24,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
-const UserViewContainer = (props) => {
+const UserCalendar = (props) => {
   /**
    * events : store retrived events in array
    * event  : store perticuler event for performing some actions on it like add/edit/delete
@@ -51,12 +56,12 @@ const UserViewContainer = (props) => {
       if(props.data.fetchResponse.error){
         alert(props.data.fetchResponse.fetchedData.message)
         props.data.fetchResponse = {} //making response to empty object for next request 
-        return <Redirect to='/admin/login'/> 
+        return <Redirect to='/login'/> 
       }else if(props.data.fetchResponse.fetchedData !== undefined){
           if(props.data.fetchResponse.fetchedData.result){
               console.log(props.data.fetchResponse.fetchedData.result)
 
-              const Events = props.data.fetchResponse.fetchedData.result
+              const Events = props.data.fetchResponse.fetchedData.result.events
               .map(event => {
                 return {
                   _id : event._id,
@@ -65,9 +70,19 @@ const UserViewContainer = (props) => {
                   end :  changeDatesType(event.end),
                 }
               })
-              console.log('Fetched Events',Events)
-              setEvents(Events); 
-              props.data.fetchResponse = {} //making response to empty object for next request 
+
+
+              const user  = props.data.fetchResponse.fetchedData.result.user;
+              const roll = user.roll;
+
+              if(roll === 'admin'){
+                return <Redirect to='/admin'/>
+              }else if(roll === 'user'){
+                console.log('Fetched Events',Events)
+                setEvents(Events); 
+                props.data.fetchResponse = {} //making response to empty object for next request 
+              }
+              
           }
       }
   }
@@ -85,7 +100,11 @@ const UserViewContainer = (props) => {
     }
   }
   /* -------X----- handleViewChange ------X---- */
-
+  const logout = () => {
+    console.log('admin')
+    Cookies.remove('auth')
+    window.location.reload(true);
+  }
   /* ------------ handleEventStatus ---------- */
 
 
@@ -99,6 +118,9 @@ return (
         localizer={localizer}
         style={{ height: "100vh" }}
       />
+      <Fab onClick={logout} variant="extended" id='logout_btn' aria-label="like" >
+        Logout
+      </Fab>
     </div>
   );
 }
@@ -110,7 +132,7 @@ const mapStateToProps = (state) => {
     }
   }
   
-  export default connect(mapStateToProps)(UserViewContainer);
+  export default connect(mapStateToProps)(UserCalendar);
 
 
 
